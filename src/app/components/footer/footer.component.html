@@ -1,0 +1,35 @@
+<ion-footer>
+  <ion-toolbar>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button
+          tab="home"
+          [routerLink]="['/tabs/home']">
+          <ion-icon name="home"></ion-icon>
+          Home
+        </ion-tab-button>
+
+        <ion-tab-button
+          tab="profile"
+          routerLink="/tabs/profile">
+          <ion-icon name="person"></ion-icon>
+          Profile
+        </ion-tab-button>
+
+        <ion-tab-button
+          tab="chat"
+          routerLink="/tabs/chat">
+          <ion-icon name="chatbubbles"></ion-icon>
+          Chat
+        </ion-tab-button>
+
+        <ion-tab-button
+          tab="matches"
+          routerLink="/tabs/matches">
+          <ion-icon name="people"></ion-icon>
+          Matches
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>
