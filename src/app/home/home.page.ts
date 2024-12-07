@@ -15,6 +15,7 @@ import {
   IonCardContent,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from '../components/header/header.component';
 
 interface UserProfile {
   id: string;
@@ -29,6 +30,7 @@ interface UserProfile {
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [
+    HeaderComponent,
     IonButton,
     IonHeader,
     IonToolbar,
