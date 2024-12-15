@@ -1,0 +1,61 @@
+.chat-content {
+  --padding: 16px; /* Optional padding for the content */
+  margin-bottom: 56px; /* Space for the footer height to avoid overlapping */
+
+  .message-label {
+    display: block; /* Ensures the label behaves like a block element for better control */
+    max-width: 75%; /* Limit message width for better readability */
+    padding: 8px;
+    border-radius: 12px;
+    word-wrap: break-word; /* Break long words to avoid overflow */
+    white-space: pre-wrap; /* Preserve new lines and white spaces */
+    font-size: 14px;
+  }
+
+  .my-message {
+    background-color: var(
+      --ion-color-primary-tint
+    ); /* User's messages in a primary color */
+    margin-left: auto; /* Align user's messages to the right */
+    text-align: left;
+    p {
+      color: var(--ion-text-color); /* Text color for user's messages */
+    }
+  }
+
+  .their-message {
+    background-color: var(--ion-color-secondary);
+    color: var(--ion-color-dark); /* Text color for others' messages */
+    margin-right: auto; /* Align others' messages to the left */
+    text-align: left;
+    p {
+      color: #fff; /* Text color for user's messages */
+    }
+  }
+}
+
+.chat-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10; /* Ensures it stays above the content */
+  background: var(--ion-color-light); /* Match the app's theme */
+  border-top: 1px solid var(--ion-color-medium); /* Optional border for separation */
+
+  ion-button.button-native {
+    --background: var(
+      --ion-color-primary-tint
+    ); /* Optional: Match the app's primary color */
+    --color: #fff; /* Optional: Ensure the text color is readable */
+  }
+
+  ion-input {
+    flex: 1; /* Ensures the input takes up available space */
+    margin-right: 8px; /* Adds spacing between the input and the button */
+  }
+
+  ion-toolbar {
+    display: flex;
+    align-items: center; /* Vertically align the input and button */
+  }
+}

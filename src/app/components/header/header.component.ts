@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   IonHeader,
@@ -8,6 +8,9 @@ import {
   IonGrid,
   IonCol,
   IonRow,
+  IonButtons,
+  IonButton,
+  IonIcon,
 } from '@ionic/angular/standalone';
 import { HeaderService } from './header.service';
 
@@ -24,9 +27,13 @@ import { HeaderService } from './header.service';
     IonGrid,
     IonCol,
     IonRow,
+    IonButtons,
+    IonButton,
+    IonIcon,
   ],
 })
 export class HeaderComponent implements OnInit {
+  @Input() showButton: boolean = false;
   title: string = '';
 
   getHeaderTitle$ = this.headerService

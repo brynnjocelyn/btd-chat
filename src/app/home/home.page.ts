@@ -13,9 +13,11 @@ import {
   IonButton,
   IonCardTitle,
   IonCardContent,
+  ModalController,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../components/header/header.component';
+import { ChatRoomComponent } from '../components/chat-room/chat-room.component';
 
 interface UserProfile {
   id: string;
@@ -30,6 +32,7 @@ interface UserProfile {
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [
+    ChatRoomComponent,
     HeaderComponent,
     IonButton,
     IonHeader,
@@ -46,6 +49,7 @@ interface UserProfile {
     IonCol,
     CommonModule,
   ],
+  providers: [ModalController],
 })
 export class HomePage {
   profiles: UserProfile[] = [
@@ -66,7 +70,7 @@ export class HomePage {
   ];
   filteredProfiles: UserProfile[] = [];
 
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {
     console.log('HomePage initialized');
@@ -89,9 +93,11 @@ export class HomePage {
     console.log(`View profile with ID: ${profileId}`);
   }
 
-  startChat(event: Event, profileId: string) {
-    event.stopPropagation(); // Prevent card click event
-    // Navigate to the chat page
-    console.log(`Start chat with profile ID: ${profileId}`);
+  async openChat(userId: string, userName: string, userProfileImage: string) {
+    const modal = await this.modalCtrl.create({
+      component: ChatRoomComponent,
+      componentProps: { userId, userName, userProfileImage },
+    });
+    return await modal.present();
   }
 }

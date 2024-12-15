@@ -14,10 +14,46 @@ export const routes: Routes = [
         path: 'profile',
         loadComponent: () =>
           import('./profile/profile.page').then((c) => c.ProfilePage),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./profile/profile-overview/profile-overview.page').then(
+                (c) => c.ProfileOverviewPage,
+              ),
+          },
+          {
+            path: 'edit',
+            loadComponent: () =>
+              import('./profile/profile-edit/profile-edit.page').then(
+                (c) => c.ProfileEditPage,
+              ),
+          },
+          {
+            path: 'settings',
+            loadComponent: () =>
+              import('./profile/profile-settings/profile-settings.page').then(
+                (c) => c.ProfileSettingsPage,
+              ),
+          },
+        ],
       },
       {
         path: 'chat',
-        loadComponent: () => import('./chat/chat.page').then((c) => c.ChatPage),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./chat/chat-list.page').then((c) => c.ChatListPage),
+          },
+          {
+            path: ':chatId',
+            loadComponent: () =>
+              import('./components/chat-room/chat-room.component').then(
+                (c) => c.ChatRoomComponent,
+              ),
+          },
+        ],
       },
       {
         path: 'matches',
@@ -38,11 +74,35 @@ export const routes: Routes = [
   },
   {
     path: 'chat/:chatId',
-    loadComponent: () => import('./chat/chat.page').then((c) => c.ChatPage),
+    loadComponent: () =>
+      import('./components/chat-room/chat-room.component').then(
+        (c) => c.ChatRoomComponent,
+      ),
   },
   {
     path: '',
     redirectTo: '/tabs/home',
     pathMatch: 'full',
+  },
+  {
+    path: 'profile-overview',
+    loadComponent: () =>
+      import('./profile/profile-overview/profile-overview.page').then(
+        (m) => m.ProfileOverviewPage,
+      ),
+  },
+  {
+    path: 'profile-edit',
+    loadComponent: () =>
+      import('./profile/profile-edit/profile-edit.page').then(
+        (m) => m.ProfileEditPage,
+      ),
+  },
+  {
+    path: 'profile-settings',
+    loadComponent: () =>
+      import('./profile/profile-settings/profile-settings.page').then(
+        (m) => m.ProfileSettingsPage,
+      ),
   },
 ];

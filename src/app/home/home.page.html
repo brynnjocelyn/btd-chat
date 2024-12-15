@@ -21,7 +21,7 @@
               <p>{{ profile.shortBio }}</p>
               <ion-button
                 fill="outline"
-                (click)="startChat($event, profile.id)"
+                (click)="openChat( profile.id, profile.name, profile.imageUrl )"
                 >Chat Now</ion-button
               >
             </ion-card-content>

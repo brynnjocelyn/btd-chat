@@ -1,0 +1,17 @@
+<btd-header [showButton]="true"></btd-header>
+<ion-content>
+  <ion-list>
+    <ion-item
+      *ngFor="let chat of chats"
+      (click)="goToChat(chat.id, chat.avatar, chat.name)">
+      <ion-avatar slot="start">
+        <img [src]="chat.avatar" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ chat.name }}</h2>
+        <p>{{ chat.lastMessage }}</p>
+      </ion-label>
+      <ion-note slot="end">{{ chat.lastActivity | date:'shortTime' }}</ion-note>
+    </ion-item>
+  </ion-list>
+</ion-content>

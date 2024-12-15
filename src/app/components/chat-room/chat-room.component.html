@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-avatar slot="start">
+      <img [src]="userProfileImage || chat.userProfileImage" />
+    </ion-avatar>
+    <ion-title>Chat with {{ userName || chat.userName }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="chat-content">
+  <div *ngIf="chat">
+    <ion-list>
+      <ion-item *ngFor="let message of chat.messages">
+        <ion-label
+          class="message-label"
+          [ngClass]="{
+            'my-message': message.senderId === 'me',
+            'their-message': message.senderId !== 'me',
+          }"
+          ><p class="message-text">{{ message.text }}</p></ion-label
+        >
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <ion-footer class="chat-footer">
+    <ion-toolbar>
+      <ion-textarea
+        placeholder="Type a message..."
+        [(ngModel)]="newMessage"
+        auto-grow="true"
+        clearInput>
+      </ion-textarea>
+      <ion-button
+        slot="end"
+        color="primary"
+        (click)="sendMessage()"
+        >Send</ion-button
+      >
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

@@ -5,7 +5,14 @@ import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Observable } from 'rxjs';
 
 import { addIcons } from 'ionicons';
-import { people, person, home, chatbubbles } from 'ionicons/icons';
+import {
+  people,
+  person,
+  home,
+  chatbubbles,
+  settings,
+  create,
+} from 'ionicons/icons';
 
 import { HeaderService } from './components/header/header.service';
 
@@ -32,6 +39,8 @@ export class AppComponent implements OnInit {
       person,
       home,
       chatbubbles,
+      settings,
+      create,
     });
   }
 

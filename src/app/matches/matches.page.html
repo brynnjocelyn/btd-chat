@@ -1,2 +1,20 @@
 <btd-header></btd-header>
-<p>matches works!</p>
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let match of matches">
+      <ion-avatar slot="start">
+        <img
+          [src]="match.avatar"
+          alt="Match Avatar" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ match.name }}</h2>
+        <p>{{ match.bio }}</p>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button (click)="goToProfile(match.id)">View</ion-button>
+        <ion-button (click)="startChat(match.id)">Chat</ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+</ion-content>

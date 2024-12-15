@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ChatPage } from './chat.page';
+import { ChatPage } from './chat-list.page';
 
 describe('ChatPage', () => {
   let component: ChatPage;

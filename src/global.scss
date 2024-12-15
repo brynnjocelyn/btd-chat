@@ -37,6 +37,22 @@
  * https://ionicframework.com/docs/theming/dark-mode
  */
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+@import "@ionic/angular/css/palettes/dark.always.css";
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
+/* @import "./theme/colors.scss"; */
+
+$primary: #7044ff;
+
+$colors: (
+  // primary: #3880ff,
+  primary: #7044ff,
+  secondary: #0cd1e8,
+  tertiary: #7044ff,
+  success: #10dc60,
+  warning: #ffce00,
+  danger: #f04141,
+  dark: #222428,
+  medium: #989aa2,
+  light: #f4f5f8
+);
