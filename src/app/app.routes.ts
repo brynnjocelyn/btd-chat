@@ -114,9 +114,4 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./shared/not-found/not-found.page').then((m) => m.NotFoundPage),
   },
-  {
-    path: 'not-found',
-    loadComponent: () =>
-      import('./shared/not-found/not-found.page').then((m) => m.NotFoundPage),
-  },
 ];
