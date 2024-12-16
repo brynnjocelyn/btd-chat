@@ -65,6 +65,10 @@ export const routes: Routes = [
         redirectTo: 'home',
         pathMatch: 'full',
       },
+      {
+        path: '**',
+        redirectTo: '/not-found',
+      },
     ],
   },
   {
@@ -104,5 +108,15 @@ export const routes: Routes = [
       import('./profile/profile-settings/profile-settings.page').then(
         (m) => m.ProfileSettingsPage,
       ),
+  },
+  {
+    path: 'not-found',
+    loadComponent: () =>
+      import('./shared/not-found/not-found.page').then((m) => m.NotFoundPage),
+  },
+  {
+    path: 'not-found',
+    loadComponent: () =>
+      import('./shared/not-found/not-found.page').then((m) => m.NotFoundPage),
   },
 ];
