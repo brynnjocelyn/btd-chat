@@ -114,4 +114,8 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./shared/not-found/not-found.page').then((m) => m.NotFoundPage),
   },
+  {
+    path: '**',
+    redirectTo: '/not-found',
+  },
 ];
