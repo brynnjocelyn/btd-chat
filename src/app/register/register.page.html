@@ -1,0 +1,81 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-content ion-padding">
+  <p>Enter your email and password to create an account.</p>
+
+  <form [formGroup]="form">
+    <div>
+      <label
+        for="email"
+        class="block text-sm font-medium leading-6 text-white"
+        >Email address</label
+      >
+      <div class="mt-2">
+        <ion-input
+          #emailInput
+          id="email"
+          fill="outline"
+          name="email"
+          formControlName="email"
+          type="email"
+          autocomplete="email"
+          required
+          class="text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 reset-password-input"></ion-input>
+        <div *ngIf="emailRequiredError">Email is required</div>
+        <div *ngIf="emailPatternError">Email must be a valid email address</div>
+      </div>
+    </div>
+
+    <div>
+      <label
+        for="password"
+        class="block text-sm font-medium leading-6 text-white"
+        >Password</label
+      >
+      <div class="mt-2">
+        <ion-input
+          #passwordInput
+          id="password"
+          fill="outline"
+          name="password"
+          formControlName="password"
+          type="password"
+          autocomplete="new-password"
+          required
+          class="text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 reset-password-input"></ion-input>
+        <div *ngIf="passwordRequiredError">Password is required</div>
+        <div *ngIf="passwordMinLengthError">
+          Password must be at least 8 characters
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label
+        for="confirmPassword"
+        class="block text-sm font-medium leading-6 text-white"
+        >Confirm Password</label
+      >
+      <div class="mt-2">
+        <ion-input
+          #confirmPasswordInput
+          id="confirmPassword"
+          fill="outline"
+          name="confirmPassword"
+          formControlName="confirmPassword"
+          type="password"
+          autocomplete="new-password"
+          required
+          class="text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 reset-password-input"></ion-input>
+        <div *ngIf="confirmPasswordRequiredError">
+          Confirm Password is required
+        </div>
+        <div *ngIf="confirmPasswordMismatchError">Passwords do not match</div>
+      </div>
+    </div>
+  </form>
+</ion-content>

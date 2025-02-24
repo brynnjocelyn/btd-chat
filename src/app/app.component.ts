@@ -12,6 +12,9 @@ import {
   chatbubbles,
   settings,
   create,
+  logOut,
+  logOutOutline,
+  arrowBack,
 } from 'ionicons/icons';
 
 import { HeaderService } from './components/header/header.service';
@@ -41,10 +44,14 @@ export class AppComponent implements OnInit {
       chatbubbles,
       settings,
       create,
+      logOut,
+      logOutOutline,
+      arrowBack,
     });
   }
 
   ngOnInit() {
+    console.log('AppComponent ngOnInit');
     this.routerEvents$.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const url = event.url;

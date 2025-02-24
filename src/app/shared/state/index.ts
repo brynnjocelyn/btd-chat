@@ -1,8 +1,10 @@
 import { ActionReducerMap } from '@ngrx/store';
 import { HeaderState, headerReducer } from './reducers/header.reducer';
 import { ChatState, chatReducer } from './reducers/chat.reducer';
+import { AuthState, authReducer } from './reducers/auth.reducer';
 
 export interface AppState {
+  auth: AuthState;
   // tabs: TabState;
   header: HeaderState;
   chat: ChatState;
@@ -11,6 +13,7 @@ export interface AppState {
 }
 
 export const reducers: ActionReducerMap<AppState> = {
+  auth: authReducer,
   // tabs: tabsReducer,
   header: headerReducer,
   chat: chatReducer,

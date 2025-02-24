@@ -1,0 +1,128 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-content">
+  <div class="login-container">
+    <h2>Welcome to BLK Trans Connect</h2>
+    <p>Please log in to continue.</p>
+
+    <div class="mt-10">
+      <div>
+        @if (!!loginForm) {
+        <form
+          [formGroup]="loginForm"
+          class="space-y-6"
+          (ngSubmit)="onLogin()">
+          <div>
+            <label
+              for="email"
+              class="block text-sm font-medium leading-6 text-white"
+              >Email address</label
+            >
+            <div class="mt-2">
+              <ion-input
+                #emailInput
+                id="email"
+                fill="outline"
+                name="email"
+                formControlName="email"
+                type="email"
+                autocomplete="email"
+                required
+                class="text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"></ion-input>
+            </div>
+          </div>
+
+          <div class="ion-margin-top">
+            <label
+              for="password"
+              class="block text-sm font-medium leading-6 text-white"
+              >Password</label
+            >
+            <div class="mt-2">
+              <ion-input
+                id="password"
+                name="password"
+                formControlName="password"
+                type="password"
+                autocomplete="current-password"
+                fill="outline"
+                required
+                class="mt-2 text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"></ion-input>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                class="ion-margin-top h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-600" />
+              <label
+                for="remember-me"
+                class="ml-3 block text-sm leading-6 text-gray-500 remember-me"
+                >Remember me</label
+              >
+            </div>
+
+            <div class="ion-margin-top text-sm leading-6">
+              <a
+                [routerLink]="['/forgot-password']"
+                class="font-semibold text-purple-500 hover:text-purple-400"
+                >Forgot password?</a
+              >
+            </div>
+          </div>
+
+          <div>
+            <ion-button
+              type="submit"
+              [disabled]="!loginForm.valid"
+              class="ion-margin-top flex w-full justify-center relative rounded-md bg-purple-600/70 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-purple-600/70 disabled:hover:bg-purple-600/70 disabled:focus-visible:outline-purple-600/70 disabled:focus-visible:outline-offset-2 disabled:focus-visible:outline-2 disabled:focus-visible:outline">
+              @if (!loading) { Sign in } @else {
+              <span
+                class="inset-y-0 start-3/6 loading loading-spinner text-accent"></span>
+              }
+            </ion-button>
+          </div>
+        </form>
+        }
+      </div>
+    </div>
+
+    <ion-button
+      expand="block"
+      color="primary"
+      (click)="loginWithProvider('google')">
+      <ion-icon
+        name="logo-google"
+        slot="start"></ion-icon>
+      Login with Google
+    </ion-button>
+
+    <ion-button
+      expand="block"
+      color="secondary"
+      class="ion-margin-top"
+      (click)="loginWithProvider('facebook')">
+      <ion-icon
+        name="logo-facebook"
+        slot="start"></ion-icon>
+      Login with Facebook
+    </ion-button>
+
+    <ion-button
+      expand="block"
+      color="tertiary"
+      (click)="loginWithProvider('twitter')">
+      <ion-icon
+        name="logo-twitter"
+        slot="start"></ion-icon>
+      Login with Twitter
+    </ion-button>
+  </div>
+</ion-content>
