@@ -26,6 +26,12 @@ import { AppComponent } from './app/app.component';
 
 // Routes
 import { routes } from './app/app.routes';
+import { provideEffects } from '@ngrx/effects';
+import { AuthEffects } from './app/shared/state/effects/auth.effects';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 export function localStorageSyncReducer(
   reducer: ActionReducer<any>,
@@ -42,11 +48,13 @@ bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     importProvidersFrom(IonicModule.forRoot({})),
+    provideHttpClient(withInterceptorsFromDi()),
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideStore(reducers, {
       metaReducers,
     }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    provideEffects([AuthEffects]),
   ],
 });

@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { TabsPage } from './tabs/tabs.page';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: 'tabs',
     component: TabsPage,
+    canActivate: [authGuard], // Protect tabs with AuthGuard
     children: [
       {
         path: 'home',
@@ -110,9 +112,39 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'login',
+    loadComponent: () => import('./login/login.page').then((m) => m.LoginPage),
+  },
+  {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('./forgot-password/forgot-password.page').then(
+        (m) => m.ForgotPasswordPage,
+      ),
+  },
+  {
     path: 'not-found',
     loadComponent: () =>
       import('./shared/not-found/not-found.page').then((m) => m.NotFoundPage),
+  },
+  {
+    path: 'auth/reset-password-request-sent',
+    loadComponent: () =>
+      import(
+        './reset-password-request-sent/reset-password-request-sent.page'
+      ).then((m) => m.ResetPasswordRequestSentPage),
+  },
+  {
+    path: 'auth/confirm-password-reset/:token',
+    loadComponent: () =>
+      import('./confirm-password-reset/confirm-password-reset.page').then(
+        (m) => m.ConfirmPasswordResetPage,
+      ),
+  },
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./register/register.page').then((m) => m.RegisterPage),
   },
   {
     path: '**',

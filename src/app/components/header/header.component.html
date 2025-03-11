@@ -13,14 +13,23 @@
       /></ion-avatar>
       <!-- <span>Black Trans Dating</span> -->
       <span>BTD</span>
+      <ion-title> {{ title }} </ion-title>
     </span>
-    <ion-title> {{ title }} </ion-title>
     @if (showButton) {
       <ion-buttons slot="end">
         <ion-button routerLink="/tabs/chats/new">
           <ion-icon
             slot="icon-only"
             name="create"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
+    @if (isAuthenticated) {
+      <ion-buttons slot="end">
+        <ion-button (click)="logout()">
+          <ion-icon
+            slot="icon-only"
+            name="log-out"></ion-icon>
         </ion-button>
       </ion-buttons>
     }
