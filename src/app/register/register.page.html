@@ -7,6 +7,7 @@
 <ion-content class="ion-content ion-padding">
   <p>Enter your email and password to create an account.</p>
 
+  @if(!!form) {
   <form [formGroup]="form">
     <div>
       <label
@@ -25,8 +26,11 @@
           autocomplete="email"
           required
           class="text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 reset-password-input"></ion-input>
-        <div *ngIf="emailRequiredError">Email is required</div>
-        <div *ngIf="emailPatternError">Email must be a valid email address</div>
+        @if(passwordRequiredError) {
+        <ion-text color="danger">Email is required</ion-text>
+        } @if(emailInvalidError) {
+        <ion-text color="danger">Email must be a valid email address</ion-text>
+        }
       </div>
     </div>
 
@@ -47,10 +51,13 @@
           autocomplete="new-password"
           required
           class="text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 reset-password-input"></ion-input>
-        <div *ngIf="passwordRequiredError">Password is required</div>
-        <div *ngIf="passwordMinLengthError">
-          Password must be at least 8 characters
-        </div>
+        @if(passwordRequiredError) {
+        <ion-text color="danger">Password is required</ion-text>
+        } @if(passwordMinLengthError) {
+        <ion-text color="danger"
+          >Password must be at least 8 characters</ion-text
+        >
+        }
       </div>
     </div>
 
@@ -71,11 +78,18 @@
           autocomplete="new-password"
           required
           class="text-black block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 reset-password-input"></ion-input>
-        <div *ngIf="confirmPasswordRequiredError">
-          Confirm Password is required
-        </div>
-        <div *ngIf="confirmPasswordMismatchError">Passwords do not match</div>
+        @if(confirmPasswordRequiredError) {
+        <ion-text color="danger">Confirm Password is required</ion-text>
+        } @if(confirmPasswordMismatchError) {
+        <ion-text color="danger">Passwords do not match</ion-text>
+        }
       </div>
     </div>
   </form>
+  }
+  <ion-alert
+    [isOpen]="!!(success$ | async)"
+    trigger="present-alert"
+    header="Account Creation Success"
+    message="Your account has been created. Please check your email for a verification link."></ion-alert>
 </ion-content>

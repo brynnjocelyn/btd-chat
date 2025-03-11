@@ -1,6 +1,6 @@
 export interface ListAuthMethodsResponse {
-  usernamePassword: true;
-  emailPassword: true;
+  usernamePassword: boolean;
+  emailPassword: boolean;
   authProviders: AuthProvider[];
 }
 

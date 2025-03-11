@@ -7,8 +7,11 @@ import {
   setAuthStatus,
   resetPasswordSuccess,
   setPasswordReset,
+  registerSuccess,
+  loadAvailableAuthMethodsSuccessAction,
 } from '../actions/auth.actions';
 import { AuthenticatedUserRecord } from '../../api/auth-with-password-response';
+import { ListAuthMethodsResponse } from '../../api/list-auth-methods-response';
 
 export const authFeatureKey = 'auth';
 
@@ -16,8 +19,10 @@ export interface AuthState {
   isLoading: boolean;
   isAuthenticated: boolean;
   token: string;
-  record: AuthenticatedUserRecord | null;
-  passwordReset: boolean;
+  record: Partial<AuthenticatedUserRecord> | null;
+  passwordResetSuccessFlag: boolean;
+  registerSuccess: boolean;
+  availableAuthMethods: ListAuthMethodsResponse | null;
 }
 
 export const initialState: AuthState = {
@@ -25,7 +30,9 @@ export const initialState: AuthState = {
   isAuthenticated: false,
   token: '',
   record: null,
-  passwordReset: false,
+  passwordResetSuccessFlag: false,
+  registerSuccess: false,
+  availableAuthMethods: null,
 };
 
 export const authReducer = createReducer(
@@ -46,9 +53,15 @@ export const authReducer = createReducer(
     return { ...state, isAuthenticated };
   }),
   on(resetPasswordSuccess, (state) => {
-    return { ...state, passwordReset: true };
+    return { ...state, passwordResetSuccessFlag: true };
   }),
   on(setPasswordReset, (state, { passwordReset }) => {
-    return { ...state, passwordReset };
+    return { ...state, passwordResetSuccessFlag: passwordReset };
+  }),
+  on(registerSuccess, (state, { newUser }) => {
+    return { ...state, registerSuccess: true, record: newUser };
+  }),
+  on(loadAvailableAuthMethodsSuccessAction, (state, { methods }) => {
+    return { ...state, availableAuthMethods: methods };
   }),
 );

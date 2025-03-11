@@ -13,6 +13,8 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonInput,
+  IonText,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
@@ -27,15 +29,17 @@ import { Observable } from 'rxjs';
   styleUrls: ['./confirm-password-reset.page.scss'],
   standalone: true,
   imports: [
-    IonAlert,
-    IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
-    IonIcon,
-    IonButton,
     CommonModule,
     FormsModule,
+    IonAlert,
+    IonButton,
+    IonContent,
+    IonHeader,
+    IonIcon,
+    IonInput,
+    IonText,
+    IonTitle,
+    IonToolbar,
     ReactiveFormsModule,
   ],
 })
@@ -46,6 +50,7 @@ export class ConfirmPasswordResetPage implements OnInit {
     this.authService.getResetPasswordSuccessFlag();
   message: string = '';
   countDown: number = 10;
+  isAlertOpen: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -59,13 +64,17 @@ export class ConfirmPasswordResetPage implements OnInit {
 
     this.buildForm();
     this.successListener();
+    this.authService.setResetPasswordSuccessFlag();
   }
 
   buildForm() {
     this.form = this.fb.group(
       {
-        password: ['', [Validators.required, Validators.minLength(8)]],
-        confirmPassword: ['', [Validators.required]],
+        password: this.fb.control('', [
+          Validators.required,
+          Validators.minLength(8),
+        ]),
+        confirmPassword: this.fb.control('', [Validators.required]),
       },
       { validators: matchPasswordsValidator() },
     );
@@ -74,11 +83,14 @@ export class ConfirmPasswordResetPage implements OnInit {
   successListener() {
     this.success$.subscribe((success) => {
       if (success) {
+        this.isAlertOpen = true;
         this.message = `Password reset successful. Redirecting to login page in ${this.countDown} seconds.`;
         this.countDown = 10;
         const interval = setInterval(() => {
           this.countDown--;
+          this.message = `Password reset successful. Redirecting to login page in ${this.countDown} seconds.`;
           if (this.countDown === 0) {
+            this.isAlertOpen = false;
             clearInterval(interval);
           }
         }, 1000);
@@ -95,7 +107,7 @@ export class ConfirmPasswordResetPage implements OnInit {
   onSubmit() {
     if (this.form?.valid) {
       console.log('Form:', this.form.value);
-      const [password, confirmPassword] = this.form.value;
+      const { password, confirmPassword } = this.form.value;
       this.authService.resetPassword(this.token!, password, confirmPassword);
     }
   }

@@ -128,14 +128,14 @@ export const routes: Routes = [
       import('./shared/not-found/not-found.page').then((m) => m.NotFoundPage),
   },
   {
-    path: 'reset-password-request-sent',
+    path: 'auth/reset-password-request-sent',
     loadComponent: () =>
       import(
         './reset-password-request-sent/reset-password-request-sent.page'
       ).then((m) => m.ResetPasswordRequestSentPage),
   },
   {
-    path: 'confirm-password-reset',
+    path: 'auth/confirm-password-reset/:token',
     loadComponent: () =>
       import('./confirm-password-reset/confirm-password-reset.page').then(
         (m) => m.ConfirmPasswordResetPage,

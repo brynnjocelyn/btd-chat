@@ -19,8 +19,17 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import PocketBase from 'pocketbase';
 import { environment } from 'src/environments/environment.prod';
-import { logoGoogle, logoTwitter, logoFacebook } from 'ionicons/icons';
+import {
+  logoGoogle,
+  logoTwitter,
+  logoFacebook,
+  logoX,
+  logoApple,
+} from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { AuthService } from '../services/auth.service';
+import { AuthProvider } from '../shared/api/list-auth-methods-response';
+import { RegisterWithOAuthRequest } from '../shared/api/register-with-oauth-request';
 
 @Component({
   selector: 'app-login',
@@ -41,10 +50,11 @@ import { addIcons } from 'ionicons';
     RouterModule,
   ],
 })
-export class LoginPage implements OnInit, AfterViewInit {
+export class LoginPage implements OnInit {
   @ViewChild('emailInput') emailInput: IonInput | undefined;
 
   pb: PocketBase;
+  providers: AuthProvider[] = [];
   provider: string = '';
 
   loginForm: FormGroup | undefined;
@@ -53,6 +63,7 @@ export class LoginPage implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
+    private auth: AuthService,
   ) {
     this.pb = new PocketBase(environment.pbBaseUrl); // Replace with your Pocketbase URL
 
@@ -60,27 +71,28 @@ export class LoginPage implements OnInit, AfterViewInit {
       logoGoogle,
       logoFacebook,
       logoTwitter,
+      logoX,
+      logoApple,
     });
   }
 
   ngOnInit() {
+    this.auth.loadAvailableAuthMethods();
     this.buildLoginForm();
 
-    setInterval(() => {
-      console.log(this.loginForm?.value, this.loginForm?.pristine);
-    }, 1000);
-
-    this.loginForm?.valueChanges.subscribe((value) => {
-      console.log('Form value changed:', value);
-    });
+    this.authMethodListener();
   }
 
   ionViewDidEnter() {
     this.emailInput?.setFocus();
-    console.log('activeElement', document.activeElement);
   }
 
-  ngAfterViewInit() {}
+  authMethodListener() {
+    this.auth.getAvailableAuthMethods().subscribe((methods) => {
+      console.log('Providers:', methods?.authProviders);
+      this.providers = methods?.authProviders || [];
+    });
+  }
 
   buildLoginForm() {
     this.loginForm = this.fb.group({
@@ -91,9 +103,6 @@ export class LoginPage implements OnInit, AfterViewInit {
 
   onLogin() {
     const { email, password } = this.loginForm?.value;
-    console.log('Logging in with email:', email);
-    console.log('Logging in with password:', password);
-    console.log('loginForm:', this.loginForm);
     this.pb
       .collection('users')
       .authWithPassword(email, password)
@@ -109,22 +118,21 @@ export class LoginPage implements OnInit, AfterViewInit {
   async loginWithProvider(provider: string) {
     this.provider = provider;
     try {
-      const userCollection = this.pb.collection('users');
-      console.log('userCollection:', userCollection);
-      console.log('Fetching auth methods...');
-      const authMethodsList = await userCollection.listAuthMethods();
-      console.log('Auth methods:', authMethodsList);
-      console.log('Auth methods:', authMethodsList);
-      const providerInfo = authMethodsList.oauth2.providers.find(
-        (p) => p.name === provider,
-      );
+      const providerInfo = this.providers.find((p) => p.name === provider);
 
       console.log('providerInfo:', providerInfo);
-      /* if (providerInfo) {
-        window.location.href = providerInfo.authURL; // Redirect to provider's login URL
+      if (providerInfo) {
+        // this.router.navigateByUrl(providerInfo.authUrl); // Redirect to provider's login URL
+        const requestPayload: Omit<RegisterWithOAuthRequest, 'createData'> = {
+          provider: providerInfo.name,
+          redirectUrl: `http://localhost:8100/api/oauth2-redirect`,
+          codeVerifier: providerInfo.codeVerifier,
+          code: providerInfo.codeChallenge,
+        };
+        this.auth.loginWithProvider(requestPayload);
       } else {
         console.error(`Provider ${provider} not found.`);
-      } */
+      }
     } catch (error) {
       console.error('Error fetching auth methods:', error);
     }

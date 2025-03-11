@@ -1,8 +1,9 @@
-export interface registerWithOAuthRequest {
+export interface RegisterWithOAuthRequest {
   provider: string;
   code: string;
   codeVerifier: string;
-  redirectUri: string;
+  redirectUri?: string;
+  redirectUrl?: string;
   createData?: CreateUserData;
 }
 

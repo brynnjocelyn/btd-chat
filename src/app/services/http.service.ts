@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthWithPasswordResponse } from '../shared/api/auth-with-password-response';
 import { ListAuthMethodsResponse } from '../shared/api/list-auth-methods-response';
-import { registerWithOAuthRequest } from '../shared/api/register-with-oauth-request';
+import { RegisterWithOAuthRequest } from '../shared/api/register-with-oauth-request';
+import { RegisterWithPasswordResponse } from '../shared/api/register-with-password-response';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +16,10 @@ export class HttpService {
   constructor(private http: HttpClient) {}
 
   loginWithOAuth2(
-    payload: registerWithOAuthRequest,
+    payload: Omit<RegisterWithOAuthRequest, 'createData'>,
   ): Observable<AuthWithPasswordResponse> {
     return this.http.post<AuthWithPasswordResponse>(
-      `${this.pbBaseUrl}/api/collecitons/users/auth-with-oauth2`,
+      `${this.pbBaseUrl}/api/collections/users/auth-with-oauth2`,
       payload,
     );
   }
@@ -31,7 +32,7 @@ export class HttpService {
     password: string,
   ): Observable<AuthWithPasswordResponse> {
     return this.http.post<AuthWithPasswordResponse>(
-      `${this.pbBaseUrl}/api/collecitons/users/auth-with-password`,
+      `${this.pbBaseUrl}/api/collections/users/auth-with-password`,
       { identity: email, password },
     );
   }
@@ -49,14 +50,14 @@ export class HttpService {
     email: string,
     password: string,
     passwordConfirm: string,
-  ): Observable<AuthWithPasswordResponse> {
+  ): Observable<RegisterWithPasswordResponse> {
     const body = {
       email,
       password,
       passwordConfirm,
     };
-    return this.http.post<AuthWithPasswordResponse>(
-      `${this.pbBaseUrl}/api/collecitons/users/register-with-password`,
+    return this.http.post<RegisterWithPasswordResponse>(
+      `${this.pbBaseUrl}/api/collections/users/records`,
       body,
     );
   }
@@ -66,7 +67,7 @@ export class HttpService {
    */
   requestEmailVerification(email: string): Observable<null> {
     return this.http.post<null>(
-      `${this.pbBaseUrl}/api/collecitons/users/request-verification`,
+      `${this.pbBaseUrl}/api/collections/users/request-verification`,
       { email },
     );
   }
@@ -76,7 +77,7 @@ export class HttpService {
    */
   confirmEmailVerification(token: string): Observable<null> {
     return this.http.post<null>(
-      `${this.pbBaseUrl}/api/collecitons/users/confirm-verification`,
+      `${this.pbBaseUrl}/api/collections/users/confirm-verification`,
       { token },
     );
   }
@@ -99,13 +100,13 @@ export class HttpService {
    * After this request all previously issued tokens for the specific record will be automatically invalidated.
    */
   confirmResetPassword(
-    authToken: string,
+    token: string,
     password: string,
     passwordConfirm: string,
   ): Observable<null> {
     return this.http.post<null>(
-      `${this.pbBaseUrl}/api/collecitons/users/confirm-password-reset`,
-      { authToken, password, passwordConfirm },
+      `${this.pbBaseUrl}/api/collections/users/confirm-password-reset`,
+      { token, password, passwordConfirm },
     );
   }
 
@@ -119,7 +120,7 @@ export class HttpService {
   refreshToken(token: string): Observable<AuthWithPasswordResponse> {
     const headers = new HttpHeaders().set('Authorization', `TOKEN ${token}`);
     return this.http.post<AuthWithPasswordResponse>(
-      `${this.pbBaseUrl}/api/collecitons/users/auth-refresh`,
+      `${this.pbBaseUrl}/api/collections/users/auth-refresh`,
       { token },
       { headers },
     );
@@ -131,7 +132,7 @@ export class HttpService {
   requestEmailChange(newEmail: string, token: string): Observable<null> {
     const headers = new HttpHeaders().set('Authorization', `TOKEN ${token}`);
     return this.http.post<null>(
-      `${this.pbBaseUrl}/api/collecitons/users/request-email-change`,
+      `${this.pbBaseUrl}/api/collections/users/request-email-change`,
       { newEmail },
       { headers },
     );
@@ -145,7 +146,7 @@ export class HttpService {
    */
   confirmEmailChange(token: string, password: string): Observable<null> {
     return this.http.post<null>(
-      `${this.pbBaseUrl}/api/collecitons/users/confirm-email-change`,
+      `${this.pbBaseUrl}/api/collections/users/confirm-email-change`,
       { token, password },
     );
   }
@@ -155,7 +156,7 @@ export class HttpService {
    */
   listAuthMethods(): Observable<ListAuthMethodsResponse> {
     return this.http.get<ListAuthMethodsResponse>(
-      `${this.pbBaseUrl}/api/collecitons/users/auth-methods`,
+      `${this.pbBaseUrl}/api/collections/users/auth-methods`,
     );
   }
 
@@ -169,7 +170,7 @@ export class HttpService {
   listOAuth2Accounts(id: string, token: string): Observable<null> {
     const headers = new HttpHeaders().set('Authorization', `TOKEN ${token}`);
     return this.http.get<null>(
-      `${this.pbBaseUrl}/api/collecitons/users/records/${id}/external-auths`,
+      `${this.pbBaseUrl}/api/collections/users/records/${id}/external-auths`,
       { headers },
     );
   }
@@ -183,7 +184,7 @@ export class HttpService {
    */
   unlinkOAuth2Account(id: string, provider: string): Observable<null> {
     return this.http.delete<null>(
-      `${this.pbBaseUrl}/api/collecitons/users/records/${id}/external-auths/${provider}`,
+      `${this.pbBaseUrl}/api/collections/users/records/${id}/external-auths/${provider}`,
     );
   }
 }

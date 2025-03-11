@@ -15,5 +15,15 @@ export const selectIsAuthenticated = createSelector(
 
 export const selectResetPasswordSuccessFlag = createSelector(
   selectAuthState,
-  (state) => state.passwordReset,
+  (state) => state.passwordResetSuccessFlag,
+);
+
+export const selectRegisterSuccessFlag = createSelector(
+  selectAuthState,
+  (state) => state.registerSuccess,
+);
+
+export const selectAvailableAuthMethods = createSelector(
+  selectAuthState,
+  (state) => state.availableAuthMethods,
 );

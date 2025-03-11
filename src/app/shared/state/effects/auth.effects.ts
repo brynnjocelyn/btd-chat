@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core';
 import PocketBase from 'pocketbase';
-import { switchMap, map, catchError, of, EMPTY, delay } from 'rxjs';
+import {
+  switchMap,
+  map,
+  catchError,
+  of,
+  EMPTY,
+  delay,
+  mergeMap,
+  from,
+} from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import {
   login,
@@ -19,6 +28,13 @@ import {
   resetPasswordFailure,
   resetPasswordSuccess,
   setPasswordReset,
+  sendEmailVerificationRequest,
+  sendEmailVerificationRequestSuccess,
+  sendEmailVerificationRequestFailure,
+  loadAvailableAuthMethodsAction,
+  loadAvailableAuthMethodsFailureAction,
+  loadAvailableAuthMethodsSuccessAction,
+  loginWithProviderAction,
 } from '../actions/auth.actions';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { HttpService } from 'src/app/services/http.service';
@@ -77,7 +93,10 @@ export class AuthEffects {
         this.httpService
           .registerWithPassword(email, password, passwordConfirm)
           .pipe(
-            map(() => registerSuccess({ email })),
+            mergeMap((newUser) => [
+              registerSuccess({ newUser }), // Save the new user record to the state
+              sendEmailVerificationRequest({ email: newUser.email }), // Send an email verification request
+            ]),
             catchError((error) => of(registerFailure({ error }))),
           ),
       ),
@@ -125,6 +144,55 @@ export class AuthEffects {
         this.router.navigate(['/login']);
         return setPasswordReset({ passwordReset: false });
       }),
+    ),
+  );
+
+  sendEmailVerificationRequest$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(sendEmailVerificationRequest),
+      switchMap(({ email }) =>
+        this.httpService.requestEmailVerification(email).pipe(
+          map(() => {
+            console.log('Email verification request sent');
+            return sendEmailVerificationRequestSuccess();
+          }),
+          catchError((error) =>
+            of(sendEmailVerificationRequestFailure({ error })),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  loadAvailableAuthMethods$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadAvailableAuthMethodsAction),
+      switchMap(() =>
+        this.httpService.listAuthMethods().pipe(
+          map((methods) => loadAvailableAuthMethodsSuccessAction({ methods })),
+          catchError((error) =>
+            of(loadAvailableAuthMethodsFailureAction({ error })),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  loginWithProvider$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loginWithProviderAction),
+      switchMap(({ providerInfo, pb }) =>
+        from(
+          pb
+            .collection('users')
+            .authWithOAuth2({ provider: providerInfo.provider }),
+        ).pipe(
+          map(({ token, record }: { token: string; record: any }) =>
+            loginSuccess({ token, record }),
+          ),
+          catchError((error) => of(loginFailure({ error }))),
+        ),
+      ),
     ),
   );
 
