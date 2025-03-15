@@ -73,7 +73,6 @@ export const AuthActions = createActionGroup({
     // LoginWithProvider
     loginWithProviderAction: props<{
       providerInfo: Omit<RegisterWithOAuthRequest, 'createData'>;
-      pb: PocketBase;
     }>(),
     loginWithProviderSuccess: props<LoginWithProviderResponse>(),
     loginWithProviderFailure: props<{ error: PBErrorResponse }>(),

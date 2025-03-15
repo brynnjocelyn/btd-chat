@@ -17,29 +17,24 @@ import {
   sendResetPasswordEmail,
   resetPassword,
   refreshToken,
-  setResetPasswordSuccessFlag,
   resetPasswordSuccess,
   loadAvailableAuthMethodsAction,
   loginWithProviderAction,
 } from '../shared/state/actions/auth.actions';
-import PocketBase from 'pocketbase';
-import { environment } from 'src/environments/environment.prod';
 import { ListAuthMethodsResponse } from '../shared/api/list-auth-methods-response';
 import { RegisterWithOAuthRequest } from '../shared/api/register-with-oauth-request';
+import { pb } from '../shared/pocketbase/pocketbase';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  pb: PocketBase;
-
   constructor(private store: Store) {
     console.log('AuthService constructor');
-    this.pb = new PocketBase(environment.pbBaseUrl); // Replace with your Pocketbase URL
-    this.setAuthStatus(this.pb.authStore.isValid);
+    this.setAuthStatus(pb.authStore.isValid);
 
-    this.pb.authStore.onChange(() => {
-      const isAuthenticated = this.pb.authStore.isValid;
+    pb.authStore.onChange(() => {
+      const isAuthenticated = pb.authStore.isValid;
       this.setAuthStatus(isAuthenticated);
     });
   }
@@ -64,11 +59,11 @@ export class AuthService {
     providerInfo: Omit<RegisterWithOAuthRequest, 'createData'>,
   ): void {
     // await pb.collection('users').authWithOAuth2({ provider: providerInfo.provider });
-    this.store.dispatch(loginWithProviderAction({ providerInfo, pb: this.pb }));
+    this.store.dispatch(loginWithProviderAction({ providerInfo }));
   }
 
   logout(): void {
-    this.pb.authStore.clear();
+    pb.authStore.clear();
     this.store.dispatch(logout());
   }
 

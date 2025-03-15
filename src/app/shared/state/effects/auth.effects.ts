@@ -10,7 +10,6 @@ import {
   mergeMap,
   from,
 } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
 import {
   login,
   loginSuccess,
@@ -40,13 +39,12 @@ import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { HttpService } from 'src/app/services/http.service';
 import { PBErrorResponse } from '../../api/pb-error-response';
 import { Router } from '@angular/router';
+import { pb } from '../../pocketbase/pocketbase';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthEffects {
-  pb: PocketBase;
-
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(login),
@@ -181,11 +179,14 @@ export class AuthEffects {
   loginWithProvider$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loginWithProviderAction),
-      switchMap(({ providerInfo, pb }) =>
+      mergeMap(({ providerInfo }) =>
         from(
           pb
             .collection('users')
-            .authWithOAuth2({ provider: providerInfo.provider }),
+            .authWithOAuth2({
+              provider: providerInfo.provider,
+              urlCallback: (url: string) => console.log('url:', url),
+            }),
         ).pipe(
           map(({ token, record }: { token: string; record: any }) =>
             loginSuccess({ token, record }),
@@ -200,7 +201,5 @@ export class AuthEffects {
     private actions$: Actions,
     private httpService: HttpService,
     private router: Router,
-  ) {
-    this.pb = new PocketBase(environment.pbBaseUrl);
-  }
+  ) {}
 }
